@@ -1,10 +1,14 @@
 import * as express from "express";
 const router = express.Router();
 import Diagram from "../models/diagram";
+const jwt = require("jsonwebtoken");
 
 router.get('/', async (request, response) => {
+    const token = request.headers["x-access-token"];
     try {
-        const data = await Diagram.find();
+        const decoded = jwt.verify(token, "mySecretKey7654!!")
+        const username = decoded.username;
+        const data = await Diagram.find({ username: username });
         response.status(200).json(data)
     }
     catch {
@@ -13,11 +17,18 @@ router.get('/', async (request, response) => {
 });
 
 router.post('/', async (request, response) => {
-    const diagram = new Diagram({
-        cells: request.body.cells,
-        diagramName: request.body.diagramName
-    });
+    const token = request.headers["x-access-token"];
+
     try {
+        const decoded = jwt.verify(token, "mySecretKey7654!!")
+        const username = decoded.username;
+
+        const diagram = new Diagram({
+            cells: request.body.cells,
+            diagramName: request.body.diagramName,
+            username: username
+        });
+
         const result = await diagram.save();
         return response.status(201).json(result);
     }
@@ -33,7 +44,6 @@ router.delete('/:id', async (request, response) => {
                 return response.status(404).json({ error: 'Could not find diagram' });
             }
             pickedDiagram.remove();
-            alert(request.params.message);
         }
         catch {
             return response.status(500).json({ error: 'Could not delete document' })

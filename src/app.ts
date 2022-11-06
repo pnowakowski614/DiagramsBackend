@@ -6,7 +6,7 @@ import "dotenv/config";
 const app = express();
 const cors = require("cors");
 const diagramListRouter = require("./routes/diagrams");
-const usersRouter = require("./routes/users")
+const usersRouter = require("./routes/users");
 
 app.use(cors());
 app.use(express.json());

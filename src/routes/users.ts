@@ -1,6 +1,7 @@
 import * as express from "express";
 const router = express.Router();
 import User from "../models/user";
+const jwt = require("jsonwebtoken");
 
 router.get('/', async (request, response) => {
     try {
@@ -18,11 +19,15 @@ router.post('/login', async (request, response) => {
         password: request.body.password
     })
 
-    if (!user) {
-        return response.json({ status: 'error', user: false })
+    if (user) {
+        const token = jwt.sign({
+            username: user.username,
+            email: user.email
+        }, "mySecretKey7654!!")
+        return response.json({ status: 'ok', user: token })
     }
     else {
-        return response.json({ status: 'ok', user: true})
+        return response.json({ status: 'error', user: false})
     }
 })
 
@@ -35,8 +40,7 @@ router.post('/register', async (request, response) => {
         })
         response.json({ status: 'ok' })
     } catch (err) {
-        console.log(err);
-        response.json({ status: 'error', error: 'Duplicate email!' })
+        response.json({ status: 'error', error: 'Duplicate email or username!' })
     }
 })
 

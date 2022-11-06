@@ -2,7 +2,8 @@ import * as mongoose from "mongoose";
 
 const diagramSchema = new mongoose.Schema({
     cells: Array,
-    diagramName: String
+    diagramName: String,
+    username: String
 }, {
     collection: "diagrams"
 })
