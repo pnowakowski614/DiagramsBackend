@@ -1,8 +1,6 @@
 import * as express from "express";
 const router = express.Router();
 import User from "../models/user";
-import { request } from "express";
-import Diagram from "../models/diagram";
 
 router.get('/', async (request, response) => {
     try {
@@ -14,18 +12,31 @@ router.get('/', async (request, response) => {
     }
 });
 
-router.post('/', async (request, response) => {
-    const user = new User({
+router.post('/login', async (request, response) => {
+    const user = await User.findOne({
         username: request.body.username,
-        email: request.body.email,
         password: request.body.password
-    });
-    try {
-        const result = await user.save();
-        return response.status(201).json(result);
+    })
+
+    if (!user) {
+        return response.json({ status: 'error', user: false })
     }
-    catch{
-        return response.status(500).json({ error: "Could not create user" })
+    else {
+        return response.json({ status: 'ok', user: true})
+    }
+})
+
+router.post('/register', async (request, response) => {
+    try {
+        await User.create({
+            username: request.body.username,
+            email: request.body.email,
+            password: request.body.password,
+        })
+        response.json({ status: 'ok' })
+    } catch (err) {
+        console.log(err);
+        response.json({ status: 'error', error: 'Duplicate email!' })
     }
 })
 
