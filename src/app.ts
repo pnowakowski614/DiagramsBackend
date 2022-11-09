@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-mongoose.connect(process.env.DB_URL);
+mongoose.connect(process.env.MONGODB_URI || process.env.DB_URL);
 const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("ok"));
