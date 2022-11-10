@@ -21,4 +21,4 @@ db.once("open", () => console.log("ok"));
 app.use('/diagrams', diagramListRouter);
 app.use('/users', usersRouter);
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT, console.log(process.env.PORT));
