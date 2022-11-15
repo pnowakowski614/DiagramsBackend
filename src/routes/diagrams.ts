@@ -16,6 +16,19 @@ router.get('/', async (request, response) => {
     }
 });
 
+router.get('/:id', async (request, response) => {
+    try {
+        const pickedDiagram = await Diagram.findById(request.params.id);
+        if (pickedDiagram === null) {
+            return response.status(404).json({ error: 'Could not find diagram' });
+        }
+        return response.status(200).json(pickedDiagram)
+    }
+    catch {
+        return response.status(500).json({ error: 'Could not delete document' })
+    }
+})
+
 router.post('/', async (request, response) => {
     const token = request.headers["x-access-token"];
 
