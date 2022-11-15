@@ -57,6 +57,7 @@ router.delete('/:id', async (request, response) => {
                 return response.status(404).json({ error: 'Could not find diagram' });
             }
             pickedDiagram.remove();
+            return response.status(200).json({ message: 'Element deleted'});
         }
         catch {
             return response.status(500).json({ error: 'Could not delete document' })
