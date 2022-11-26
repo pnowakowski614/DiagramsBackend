@@ -1,7 +1,6 @@
 import * as express from "express";
 const router = express.Router();
 import User from "../models/user";
-import * as Console from "console";
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -37,12 +36,16 @@ router.post('/login', async (request, response) => {
 router.post('/register', async (request, response) => {
     try {
         const newPassword = await bcrypt.hash(request.body.password, 10);
-        await User.create({
+        const user = await User.create({
             username: request.body.username,
             email: request.body.email,
             password: newPassword,
         })
-        response.json({ status: 'ok' })
+        const token = jwt.sign({
+            username: user.username,
+            email: user.email
+        }, "mySecretKey7654!!")
+        response.json({ status: 'ok', user: token })
     } catch (err) {
         response.json({ status: 'error', error: 'Duplicate email or username!' })
     }
