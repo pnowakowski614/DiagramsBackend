@@ -15,22 +15,26 @@ router.get('/', async (request, response) => {
 });
 
 router.post('/login', async (request, response) => {
-    const user = await User.findOne({
-        username: request.body.username
-    })
+    try {
+        const user = await User.findOne({
+            username: request.body.username
+        })
 
-    const isPasswordValid = bcrypt.compare(request.body.password, user.password);
+        const isPasswordValid = bcrypt.compare(request.body.password, user.password);
 
-    if (isPasswordValid) {
-        const token = jwt.sign({
-            username: user.username,
-            email: user.email
-        }, "mySecretKey7654!!")
-        return response.json({ status: 'ok', user: token, username: user.username })
+        if (isPasswordValid) {
+            const token = jwt.sign({
+                username: user.username,
+                email: user.email
+            }, "mySecretKey7654!!")
+            return response.json({status: 'ok', user: token, username: user.username})
+        } else {
+            return response.json({status: 'error', user: false})
+        }
     }
-    else {
-        return response.json({ status: 'error', user: false})
-    }
+        catch {
+            return response.json({status: 'error', user: false})
+        }
 })
 
 router.post('/register', async (request, response) => {
