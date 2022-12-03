@@ -15,9 +15,14 @@ router.get('/', async (request, response) => {
 });
 
 router.post('/login', async (request, response) => {
+    try {
         const user = await User.findOne({
             username: request.body.username
         })
+
+        if(!user) {
+            return response.status(500).json({status: 'error', user: false})
+        }
 
         const isPasswordValid = await bcrypt.compare(request.body.password, user.password);
 
@@ -27,7 +32,8 @@ router.post('/login', async (request, response) => {
                 email: user.email
             }, "mySecretKey7654!!")
             return response.status(200).json({status: 'ok', user: token, username: user.username})
-        } else {
+        }
+    } catch {
             return response.status(500).json({status: 'error', user: false})
         }
 })
