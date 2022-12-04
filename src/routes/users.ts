@@ -55,9 +55,9 @@ router.post('/register', async (request, response) => {
             username: user.username,
             email: user.email
         }, "mySecretKey7654!!")
-        response.json({ status: 'ok', user: token })
+        response.status(200).json({ status: 'ok', user: token })
     } catch (err) {
-        response.json({ status: 'error', error: 'Duplicate email or username!' })
+        response.status(500).json({ status: 'error', error: 'Duplicate email or username!' })
     }
 })
 
