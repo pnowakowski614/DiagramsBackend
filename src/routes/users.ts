@@ -33,6 +33,7 @@ router.post('/login', async (request, response) => {
                 username: user.username,
                 email: user.email
             }, "mySecretKey7654!!")
+            console.log(response);
             return response.status(200).json({status: 'ok', user: token, username: user.username})
         } else {
             return response.status(500).json({status: 'error', user: false})
