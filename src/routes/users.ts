@@ -21,7 +21,7 @@ router.post('/login', async (request, response) => {
         })
 
         if(!user) {
-            console.log("no user")
+            console.log(response);
             return response.status(500).json({status: 'error', user: false})
         }
 
