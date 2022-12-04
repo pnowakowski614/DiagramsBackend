@@ -23,12 +23,10 @@ router.post('/login', async (request, response) => {
         console.log(user);
 
         if(!user) {
-            console.log("no user");
             return response.status(500).json({status: 'error', user: false})
         }
 
         const isPasswordValid = await bcrypt.compare(request.body.password, user.password);
-        console.log(isPasswordValid);
 
         if (isPasswordValid) {
             const token = jwt.sign({
