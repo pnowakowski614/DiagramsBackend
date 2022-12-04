@@ -32,6 +32,8 @@ router.post('/login', async (request, response) => {
                 email: user.email
             }, "mySecretKey7654!!")
             return response.status(200).json({status: 'ok', user: token, username: user.username})
+        } else {
+            return response.status(500).json({status: 'error', user: false})
         }
     } catch {
             return response.status(500).json({status: 'error', user: false})
